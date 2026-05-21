@@ -5,7 +5,8 @@ function App() {
   const [email, setEmail] = useState('');
   const [mensaje, setMensaje] = useState('');
   
-const API_URL = 'https://amazonaws.com';
+  // ⚠️ REEMPLAZA ESTA URL CON TU URL DE INVOCACIÓN EXACTA DE API GATEWAY
+const API_URL = 'https://llqryh4gg.execute-api.us-east-2.amazonaws.com/dev/guardar-correo';
   const manejarEnvio = async (e) => {
     e.preventDefault();
     setMensaje('Enviando...');
