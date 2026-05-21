@@ -1,25 +1,66 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [email, setEmail] = useState('');
+  const [mensaje, setMensaje] = useState('');
+  
+  // ⚠️ REEMPLAZA ESTA URL CON TU URL DE INVOCACIÓN EXACTA DE API GATEWAY
+const API_URL = 'https://lllqryh4gg.execute-api.us-east-2.amazonaws.com/guardar-correo';
+  const manejarEnvio = async (e) => {
+    e.preventDefault();
+    setMensaje('Enviando...');
+
+    try {
+      const respuesta = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email }),
+      });
+
+      if (respuesta.ok) {
+        setMensaje('¡Correo guardado exitosamente en AWS!');
+        setEmail('');
+      } else {
+        setMensaje('Hubo un problema al guardar el correo.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setMensaje('Error de conexión con el servidor.');
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h2>Registro de Usuarios</h2>
+        <p>Introduce tu correo para guardarlo en la base de datos de AWS:</p>
+        
+        <form onSubmit={manejarEnvio} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <input
+            type="email"
+            placeholder="ejemplo@correo.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ padding: '10px', borderRadius: '5px', border: 'none', width: '250px', fontSize: '16px' }}
+          />
+          <button 
+            type="submit" 
+            style={{ padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px' }}
+          >
+            Registrar Correo
+          </button>
+        </form>
+
+        {mensaje && <p style={{ marginTop: '20px', fontSize: '16px', color: '#ffc107' }}>{mensaje}</p>}
       </header>
     </div>
   );
 }
 
 export default App;
+
+
